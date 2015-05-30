@@ -9,6 +9,12 @@
     "resources": {
         "media": [
             {
+                "characterRegex": "[0-9,:]",
+                "file": "fonts/DIN Bold.ttf",
+                "name": "FONT_DIN_BOLD_32",
+                "type": "font"
+            },
+            {
                 "file": "images/pnc_icon.png",
                 "menuIcon": true,
                 "name": "IMAGE_ICON",
@@ -20,9 +26,9 @@
                 "type": "png"
             },
             {
-                "characterRegex": "[0-9,:]",
+                "characterRegex": "[O,C,L,S,D,E,P,N]",
                 "file": "fonts/DIN.ttf",
-                "name": "FONT_DIN_bold_32",
+                "name": "FONT_DIN_24",
                 "type": "font"
             }
         ]
