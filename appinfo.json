@@ -1,0 +1,40 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "letskillbrad@gmail.com",
+    "longName": "Open Hours",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/pnc_icon.png",
+                "menuIcon": true,
+                "name": "IMAGE_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/pnc_background.png",
+                "name": "IMAGE_BACKGROUND",
+                "type": "png"
+            },
+            {
+                "characterRegex": "[0-9,:]",
+                "file": "fonts/DIN.ttf",
+                "name": "FONT_DIN_bold_32",
+                "type": "font"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "Open Hours",
+    "targetPlatforms": [
+        "aplite"
+    ],
+    "uuid": "391d462d-3c9d-4f99-a305-c31874a24a19",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
