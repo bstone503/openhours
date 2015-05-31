@@ -5,6 +5,11 @@ TextLayer *s_time_layer;
 TextLayer *s_status_layer;
 static GFont s_time_font;
 static GFont s_status_font;
+static int hour;
+static int day;
+
+static struct tm *tick_time;
+static struct tm *t;
 
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
@@ -12,27 +17,55 @@ static GBitmap *s_background_bitmap;
 static void update_time() {
   // Get a tm structure
   time_t temp = time(NULL);
-  struct tm *tick_time = localtime(&temp);
+  tick_time = localtime(&temp);
   
   // Create a long-lived buffer
-  static char buffer [] = "00:00";
+  static char time_text [] = "00:00";
   
   // Write the current hours and minutes into the buffer
   if(clock_is_24h_style() == true) {
     //use 24 hour format
-    strftime(buffer, sizeof("00:00"), "%H:%M", tick_time);
+    strftime(time_text, sizeof("00:00"), "%H:%M", tick_time);
   } else {
     // Use 12 hour format
-    strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
+    strftime(time_text, sizeof("00:00"), "%I:%M", tick_time);
     }
-  
   // Display this time on the TextLayer
-  text_layer_set_text(s_time_layer, buffer);
+  text_layer_set_text(s_time_layer, time_text);
 }
 
-/*static void update_status() {
+static void update_status() {
+  time_t temp = time(NULL);
+  tick_time = localtime(&temp);
+  
+  day = ((int)(t->tm_wday));  
+  hour = ((int)(t->tm_hour));
+  
+  static char open_status[8];
+  if(day > 0 && day < 5) {
+    if(9 <= hour && hour <= 17) {
+      strftime(open_status, sizeof(open_status), "OPEN", tick_time);
+      } else {
+      strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
+      } 
+  } else if(day == 5) {
+    if(9 <= hour && hour <= 18) {
+      strftime(open_status, sizeof(open_status), "OPEN", tick_time);
+      } else {
+      strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
+      }
+    } else if(day == 6) {
+    if(9 <= hour && hour <= 13) {
+      strftime(open_status, sizeof(open_status), "OPEN", tick_time);
+      } else {
+      strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
+      }
+    } else {
+    strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
+    }
+  text_layer_set_text(s_status_layer, open_status);
 }
-*/
+
 
 static void main_window_load(Window *window) {
   //Create GBitmap, set to BitmapLayer
@@ -65,6 +98,7 @@ static void main_window_load(Window *window) {
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_status_layer));
   
   update_time();
+  update_status();
 }
 
 static void main_window_unload(Window *window) {

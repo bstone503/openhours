@@ -4,7 +4,7 @@
         ""
     ],
     "companyName": "letskillbrad@gmail.com",
-    "longName": "Open Hours",
+    "longName": "PNC Open Hours",
     "projectType": "native",
     "resources": {
         "media": [
@@ -39,7 +39,7 @@
         "aplite"
     ],
     "uuid": "391d462d-3c9d-4f99-a305-c31874a24a19",
-    "versionLabel": "1.0",
+    "versionLabel": "0.8",
     "watchapp": {
         "watchface": true
     }
