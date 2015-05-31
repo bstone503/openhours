@@ -102,28 +102,31 @@ static void main_window_unload(Window *window) {
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-  update_time();
-  update_status();
+  if(units_changed & MINUTE_UNIT) {
+    update_time();
+    APP_LOG(APP_LOG_LEVEL_INFO, "Time updated");
+  }
+  if(units_changed & HOUR_UNIT) {
+    update_status();
+    APP_LOG(APP_LOG_LEVEL_INFO, "Open/Closed status updated");
+  }
 }
 
 static void init() {
   // Create main Window element and assign to pointer
   s_main_window = window_create();
-  APP_LOG(APP_LOG_LEVEL_INFO, "Main window loaded.");
     
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
     .load = main_window_load,
     .unload = main_window_unload
   });
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Main window handlers.");
        
   // Show the Window on the watch, with animated=true
   window_stack_push(s_main_window, true);
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "showing window.");
   
   // Register with TickTimerService
-  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);  
+  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
 static void deinit() {
