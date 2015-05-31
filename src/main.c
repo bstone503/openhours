@@ -9,7 +9,6 @@ static int hour;
 static int day;
 
 static struct tm *tick_time;
-static struct tm *t;
 
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
@@ -34,39 +33,27 @@ static void update_time() {
   text_layer_set_text(s_time_layer, time_text);
 }
 
+
 static void update_status() {
   time_t temp = time(NULL);
   tick_time = localtime(&temp);
   
-  day = ((int)(t->tm_wday));  
-  hour = ((int)(t->tm_hour));
+  day = ((int)(tick_time->tm_wday));  
+  hour = ((int)(tick_time->tm_hour));
   
   static char open_status[8];
-  if(day > 0 && day < 5) {
-    if(9 <= hour && hour <= 17) {
-      strftime(open_status, sizeof(open_status), "OPEN", tick_time);
-      } else {
-      strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
-      } 
-  } else if(day == 5) {
-    if(9 <= hour && hour <= 18) {
-      strftime(open_status, sizeof(open_status), "OPEN", tick_time);
-      } else {
-      strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
-      }
-    } else if(day == 6) {
-    if(9 <= hour && hour <= 13) {
-      strftime(open_status, sizeof(open_status), "OPEN", tick_time);
-      } else {
-      strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
-      }
+  
+  if((day > 0 && day < 5) && (9 <= hour && hour <= 17)) {
+    strftime(open_status, sizeof(open_status), "OPEN", tick_time);
+    } else if((day == 5) && (9 <= hour && hour <= 18)) {
+    strftime(open_status, sizeof(open_status), "OPEN", tick_time); 
+    } else if((day == 6) && (9 <= hour && hour <= 13)) {
+    strftime(open_status, sizeof(open_status), "OPEN", tick_time);
     } else {
     strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
     }
   text_layer_set_text(s_status_layer, open_status);
 }
-
-
 static void main_window_load(Window *window) {
   //Create GBitmap, set to BitmapLayer
   s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
@@ -92,7 +79,6 @@ static void main_window_load(Window *window) {
   text_layer_set_font(s_status_layer, s_status_font);
   text_layer_set_text_alignment(s_status_layer, GTextAlignmentCenter);
   text_layer_set_text(s_status_layer, "OPEN");
-  
 
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_time_layer));
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_status_layer));
@@ -117,28 +103,31 @@ static void main_window_unload(Window *window) {
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
+  update_status();
 }
 
 static void init() {
-   // Create main Window element and assign to pointer
+  // Create main Window element and assign to pointer
   s_main_window = window_create();
-  
+  APP_LOG(APP_LOG_LEVEL_INFO, "Main window loaded.");
+    
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
     .load = main_window_load,
     .unload = main_window_unload
   });
-     
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Main window handlers.");
+       
   // Show the Window on the watch, with animated=true
   window_stack_push(s_main_window, true);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "showing window.");
   
   // Register with TickTimerService
-  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  
+  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);  
 }
 
 static void deinit() {
-   window_destroy(s_main_window);
+  window_destroy(s_main_window);
 }
 
 int main (void) {
