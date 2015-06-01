@@ -3,8 +3,10 @@
 static Window *s_main_window;
 TextLayer *s_time_layer;
 TextLayer *s_status_layer;
+
 static GFont s_time_font;
 static GFont s_status_font;
+
 static int hour;
 static int day;
 
@@ -32,7 +34,6 @@ static void update_time() {
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, time_text);
 }
-
 
 static void update_status() {
   time_t temp = time(NULL);
