@@ -44,11 +44,11 @@ static void update_status() {
   
   static char open_status[8];
   
-  if((day > 0 && day < 5) && (9 <= hour && hour <= 17)) {
+  if((day > 0 && day < 5) && (9 <= hour && hour < 17)) {
     strftime(open_status, sizeof(open_status), "OPEN", tick_time);
-    } else if((day == 5) && (9 <= hour && hour <= 18)) {
+    } else if((day == 5) && (9 <= hour && hour < 18)) {
     strftime(open_status, sizeof(open_status), "OPEN", tick_time); 
-    } else if((day == 6) && (9 <= hour && hour <= 13)) {
+    } else if((day == 6) && (9 <= hour && hour < 13)) {
     strftime(open_status, sizeof(open_status), "OPEN", tick_time);
     } else {
     strftime(open_status, sizeof(open_status), "CLOSED", tick_time);
